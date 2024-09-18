@@ -9,10 +9,12 @@ namespace Sell_Console_System.UI
     internal class App
     {
         private readonly ProductUI productUI;
+        private readonly InvoiceUI invoiceUI;
 
         public App() 
         {
             productUI = new ProductUI();
+            invoiceUI = new InvoiceUI();
         }
         public void Init()
         {
@@ -56,6 +58,9 @@ namespace Sell_Console_System.UI
                 {
                     case 1:
                         stopApp = productUI.Init();
+                        break;
+                    case 2:
+                        stopApp = invoiceUI.Init();
                         break;
                     case 3:
                         stopApp = true;

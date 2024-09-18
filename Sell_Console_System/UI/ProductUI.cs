@@ -110,6 +110,9 @@ namespace Sell_Console_System.UI
                 productRow = productRow.Substring(0, productRow.Length - 2) + ".";
 
                 Console.WriteLine(productRow);
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("__________________________________________________________\n");
+                Console.ResetColor();
 
                 resultsCounter++;
             }
@@ -140,7 +143,7 @@ namespace Sell_Console_System.UI
 
             Console.Clear();
             Console.WriteLine("┌--------------------------------------------------------------┐");
-            Console.WriteLine("|                         Update Product                       |");
+            Console.WriteLine("|                          Edit Product                        |");
             Console.WriteLine("└--------------------------------------------------------------┘");
             Console.WriteLine("\n");
 
@@ -159,7 +162,7 @@ namespace Sell_Console_System.UI
 
                 if (product.HasError)
                 {
-                    DisplayMessage(product, "", UpdateProduct);
+                    DisplayMessage(product, "");
                 }
 
                 if(product.Results.Count == 0)
@@ -181,7 +184,7 @@ namespace Sell_Console_System.UI
             } 
             while (!productExists);
 
-            Console.Clear();
+            Console.WriteLine();
             Dictionary<string, string> productUpdated = GetProductInput();
 
             IResponse result = _repository.Update(id.ToString(), productUpdated);
@@ -215,7 +218,7 @@ namespace Sell_Console_System.UI
 
                 if (product.HasError)
                 {
-                    DisplayMessage(product, "", DeleteProduct);
+                    DisplayMessage(product, "");
                 }
 
                 if (product.Results.Count == 0)
@@ -223,7 +226,7 @@ namespace Sell_Console_System.UI
                     productExists = false;
 
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(" - There is no product with the ID: {id}, please try again");
+                    Console.WriteLine($" - There is no product with the ID: {id}, please try again");
 
                     Thread.Sleep(2000);
 

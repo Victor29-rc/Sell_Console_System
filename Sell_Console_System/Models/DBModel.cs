@@ -71,6 +71,30 @@ namespace Sell_Console_System.Models
             return ExecuteQuery(query);
         }
 
+        public int GetLastInsertedId(IIdentifier entity)
+        {
+            string query = $"SELECT TOP 1 {entity.Id} FROM {entity.Table} ORDER BY {entity.Id} DESC";
+
+            IResponse response = ExecuteSelectQuery(query);
+
+            if (response.HasError || response.Results.Count == 0)
+            {
+                return 0;
+            }
+            else 
+            { 
+
+                IDictionary<string, object> result = (IDictionary<string, object>)response.Results[0];
+
+                if ((result).ContainsKey(entity.Id))
+                {
+                    return int.Parse(result[entity.Id].ToString()); 
+                }
+
+                return 0;
+            }
+        }
+
         //if the get all parameter its true, it sets the IResponse.Results variable instead of the IResponse.Result variable
         private IResponse ExecuteSelectQuery(string selectQuery)
         {

@@ -58,5 +58,9 @@ namespace Sell_Console_System.Models
             return _dbModel.SelectAll(_entity, fields);
         }
 
+        public int GetLastInsertedId()
+        {
+            return _dbModel.GetLastInsertedId(_entity);
+        }
     }
 }
