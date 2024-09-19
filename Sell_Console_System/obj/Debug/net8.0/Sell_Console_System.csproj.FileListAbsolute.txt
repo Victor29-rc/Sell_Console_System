@@ -20,3 +20,4 @@ D:\Documentos\Programacion\C# - 2024 Course\Sell_Console_System\Sell_Console_Sys
 D:\Documentos\Programacion\C# - 2024 Course\Sell_Console_System\Sell_Console_System\obj\Debug\net8.0\Sell_Console_System.pdb
 D:\Documentos\Programacion\C# - 2024 Course\Sell_Console_System\Sell_Console_System\obj\Debug\net8.0\Sell_Console_System.genruntimeconfig.cache
 D:\Documentos\Programacion\C# - 2024 Course\Sell_Console_System\Sell_Console_System\obj\Debug\net8.0\ref\Sell_Console_System.dll
+D:\Documentos\Programacion\C# - 2024 Course\Sell_Console_System\Sell_Console_System\obj\Debug\net8.0\Sell_Console_System.sourcelink.json

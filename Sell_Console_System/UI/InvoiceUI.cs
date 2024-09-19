@@ -12,9 +12,11 @@ namespace Sell_Console_System.UI
     internal class InvoiceUI
     {
         private readonly Repository<Invoice> _invoiceRepository;
+        private readonly Repository<InvoiceProduct> _invoiceProductRepository;
         public InvoiceUI()
         {
             _invoiceRepository = new Repository<Invoice>(new Invoice());
+            _invoiceProductRepository = new Repository<InvoiceProduct>(new InvoiceProduct());
         }
 
         public bool Init()
@@ -82,7 +84,50 @@ namespace Sell_Console_System.UI
 
         public void ListInvoices()
         {
+            Console.Clear();
+            Console.WriteLine("┌--------------------------------------------------------------┐");
+            Console.WriteLine("|                         Invoices List                        |");
+            Console.WriteLine("└--------------------------------------------------------------┘");
+            Console.WriteLine("\n");
 
+            IResponse response = _invoiceRepository.GetAll(["id AS 'Invoice ID', customer AS Customer, id, total AS Total"]);
+            List<object> invoices = response.Results;
+
+            foreach (object invoice in invoices)
+            {
+                foreach (KeyValuePair<string, object> invoiceData in (IDictionary<string, object>)invoice)
+                {
+                    if(invoiceData.Key != "id") {
+
+                        if(invoiceData.Key == "Invoice ID")
+                        {
+                            Console.ForegroundColor = ConsoleColor.Magenta;
+                            Console.WriteLine($"{invoiceData.Key}: {invoiceData.Value.ToString()}\n");
+                            Console.ResetColor();
+                        }
+                        else if(invoiceData.Key == "Total")
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine($"\n\n{invoiceData.Key}: {invoiceData.Value.ToString()}\n");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{invoiceData.Key}: {invoiceData.Value.ToString()}\n");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Product details:\n");
+                        DisplayItemsByInvoice(invoiceData.Value.ToString());
+                    }
+                }
+
+                Console.WriteLine("____________________________________________________________________________\n");
+            }
+
+            Console.WriteLine("\nPress a key to go back.");
+            Console.ReadKey();
         }
 
         public bool AddInvoice()
@@ -259,14 +304,12 @@ namespace Sell_Console_System.UI
                             if(!insertInvoiceResult.HasError)
                             {
                                 int lasInsertedInvoiceId = _invoiceRepository.GetLastInsertedId();
-
-                                Repository<InvoiceProduct> invoiceProductRepository = new Repository<InvoiceProduct>(new InvoiceProduct());
                                 
                                 if(lasInsertedInvoiceId != 0)
                                 {
                                     foreach (ProductRow product in productsAdded)
                                     {
-                                        _invoiceRepository.Add(new Dictionary<string, string>()
+                                        _invoiceProductRepository.Add(new Dictionary<string, string>()
                                         {
                                             {"invoiceId", lasInsertedInvoiceId.ToString()},
                                             {"productId", product.Id.ToString()},
@@ -275,9 +318,13 @@ namespace Sell_Console_System.UI
                                         });
                                     }
 
+                                    Console.Clear();
                                     Console.ForegroundColor = ConsoleColor.Green;
                                     Console.WriteLine("\nInvoice inserted successfully");
                                     Console.ResetColor();
+                                    Thread.Sleep(2000);
+
+                                    userIsEditingInvoice = false;
                                 }
                             }
                         }
@@ -285,13 +332,37 @@ namespace Sell_Console_System.UI
                 }
 
             } while(userIsEditingInvoice);
-
+             
             return true;
         }
 
         public void DeleteInvoice()
         {
 
+        }
+
+        public void DisplayItemsByInvoice(string invoiceId)
+        {
+            string itemDetailsRow;
+
+            IResponse details = _invoiceProductRepository.Select(InvoiceProduct.GetInvoiceDetailsQuery(invoiceId));
+            List<object> items = details.Results;
+
+            foreach (var item in items)
+            {
+                itemDetailsRow = "\t";
+
+                foreach (KeyValuePair<string, object> product in (IDictionary<string, object>)item)
+                {
+                    itemDetailsRow += $"{product.Key}: {product.Value}, ";
+                }
+
+                itemDetailsRow = itemDetailsRow.Substring(0, itemDetailsRow.Length - 2) + ".";
+
+                Console.WriteLine(itemDetailsRow);
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.ResetColor();
+            }
         }
     }
 

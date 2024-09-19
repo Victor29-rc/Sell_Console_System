@@ -50,6 +50,11 @@ namespace Sell_Console_System.Models
             return ExecuteSelectQuery(query);
         }
 
+        public IResponse Select(string query)
+        {
+            return ExecuteSelectQuery(query);
+        }
+
         public IResponse Insert(IIdentifier entity, Dictionary<string, string> data)
         {
             string query = GenerateInsertQueryStatement(entity, data);

@@ -38,6 +38,11 @@ namespace Sell_Console_System.Models
             return result;
         }
 
+        public IResponse Select(string query)
+        {
+            return _dbModel.Select(query);
+        }
+
         public IResponse Get(string id)
         {
             return _dbModel.Select(_entity, id);
