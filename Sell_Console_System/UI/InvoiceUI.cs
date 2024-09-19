@@ -338,7 +338,54 @@ namespace Sell_Console_System.UI
 
         public void DeleteInvoice()
         {
+            int id;
+            bool invoiceExists;
 
+            Console.Clear();
+            Console.WriteLine("┌--------------------------------------------------------------┐");
+            Console.WriteLine("|                         Delete Invoice                       |");
+            Console.WriteLine("└--------------------------------------------------------------┘");
+            Console.WriteLine("\n");
+
+            do
+            {
+                Console.Write("- Enter the invoice ID: ");
+                bool isIdValid = int.TryParse(Console.ReadLine(), out id);
+
+                while (!isIdValid)
+                {
+                    Console.Write("\n- Enter a valid invoice ID: ");
+                    isIdValid = int.TryParse(Console.ReadLine(), out id);
+                }
+
+                IResponse invoice = _invoiceRepository.Get(id.ToString());
+
+                if (invoice.HasError)
+                {
+                    invoiceExists = false;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(invoice.ErrorMessage);
+
+                    if (invoice.Results.Count == 0)
+                    {
+                        Console.WriteLine($" - There is no invoice with the ID: {id}, please try again");
+                    }
+
+                    Thread.Sleep(2000);
+
+                    Console.ResetColor();
+                    Console.Clear();
+                }
+                else
+                {
+                    invoiceExists = true;
+                }
+            }
+            while (!invoiceExists);
+
+            IResponse result = _invoiceRepository.Delete(id.ToString());
+
+            Helper.DisplayMessage(result, "Product Deleted successfully", DeleteInvoice);
         }
 
         public void DisplayItemsByInvoice(string invoiceId)

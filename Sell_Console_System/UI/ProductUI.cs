@@ -133,7 +133,7 @@ namespace Sell_Console_System.UI
 
             IResponse result =  _repository.Add(product);
 
-            DisplayMessage(result, "Product Added successfully", AddProduct);
+            Helper.DisplayMessage(result, "Product Added successfully", AddProduct);
         }
 
         private void UpdateProduct()
@@ -162,7 +162,7 @@ namespace Sell_Console_System.UI
 
                 if (product.HasError)
                 {
-                    DisplayMessage(product, "");
+                    Helper.DisplayMessage(product, "");
                 }
 
                 if(product.Results.Count == 0)
@@ -189,7 +189,7 @@ namespace Sell_Console_System.UI
 
             IResponse result = _repository.Update(id.ToString(), productUpdated);
 
-            DisplayMessage(result, "Product Updated successfully", UpdateProduct);
+            Helper.DisplayMessage(result, "Product Updated successfully", UpdateProduct);
         }
 
         private void DeleteProduct()
@@ -218,7 +218,7 @@ namespace Sell_Console_System.UI
 
                 if (product.HasError)
                 {
-                    DisplayMessage(product, "");
+                    Helper.DisplayMessage(product, "");
                 }
 
                 if (product.Results.Count == 0)
@@ -242,7 +242,7 @@ namespace Sell_Console_System.UI
 
             IResponse result = _repository.Delete(id.ToString());
 
-            DisplayMessage(result, "Product Deleted successfully", DeleteProduct);
+            Helper.DisplayMessage(result, "Product Deleted successfully", DeleteProduct);
         }
 
         private Dictionary<string, string> GetProductInput()
@@ -277,30 +277,6 @@ namespace Sell_Console_System.UI
             };
 
             return product;
-        }
-
-        private void DisplayMessage(IResponse result, string successMessage, Action? action = null)
-        {
-            if (result.HasError)
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(result.ErrorMessage);
-
-                Console.ResetColor();
-                Thread.Sleep(2000);
-
-                action?.Invoke();
-            }
-            else
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine(successMessage);
-
-                Console.ResetColor();
-                Thread.Sleep(2000);
-            }
         }
     }
 
